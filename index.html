@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>India Map Quiz</title>
+    <style>
+        body {
+            text-align: center;
+            font-family: Arial, sans-serif;
+        }
+        canvas {
+            border: 1px solid black;
+            cursor: crosshair;
+        }
+    </style>
+</head>
+<body>
+    <h1>India Map Quiz</h1>
+    <p>Click on: <strong id="target-location">Loading...</strong></p>
+    <canvas id="mapCanvas" width="800" height="600"></canvas>
+    <br>
+    <button onclick="checkAnswer()">Submit</button>
+    <p id="result"></p>
+
+    <script>
+        const locations = {
+            "Sugarcane": "Madhya Pradesh",
+            "Tea": "Assam",
+            "Coffee": "Karnataka",
+            "Rubber": "Kerala",
+            "Jute": "West Bengal",
+            "Mayurbhanj": "Odisha",
+            "Durg": "Odisha",
+            "Baildadila": "Chhattisgarh",
+            "Bellary": "Karnataka",
+            "Kudremukh": "Karnataka",
+            "Raniganj": "West Bengal",
+            "Bokaro": "Jharkhand",
+            "Talcher": "Odisha",
+            "Neyveli": "Tamil Nadu",
+            "Digboi": "Assam",
+            "Naharkatia": "Assam",
+            "Mumbai High": "Offshore of Mumbai",
+            "Bassein": "Offshore of Mumbai",
+            "Kalol": "Gujarat",
+            "Ankaleshwar": "Gujarat",
+            "Namrup": "Assam",
+            "Singrauli": "Madhya Pradesh",
+            "Ramagundam": "Telangana",
+            "Raja Sansi": "Punjab",
+            "Indira Gandhi": "Delhi",
+            "Chhatrapati Shivaji": "Mumbai",
+            "Meenambakkam": "Chennai",
+            "Netaji Subhash Chandra Bose": "Kolkata",
+            "Rajiv Gandhi": "Hyderabad"
+        };
+
+        let currentTarget = "";
+        let selectedPoint = null;
+
+        const canvas = document.getElementById("mapCanvas");
+        const ctx = canvas.getContext("2d");
+        const targetLocationElement = document.getElementById("target-location");
+        const resultElement = document.getElementById("result");
+        const mapImage = new Image();
+        mapImage.src = "india_map.png";  // Make sure to replace with the correct path
+
+        mapImage.onload = function () {
+            ctx.drawImage(mapImage, 0, 0, canvas.width, canvas.height);
+            setNewTarget();
+        };
+
+        canvas.addEventListener("click", function (event) {
+            const rect = canvas.getBoundingClientRect();
+            const x = event.clientX - rect.left;
+            const y = event.clientY - rect.top;
+            selectedPoint = { x, y };
+            redraw();
+        });
+
+        function redraw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.drawImage(mapImage, 0, 0, canvas.width, canvas.height);
+            if (selectedPoint) {
+                ctx.fillStyle = "red";
+                ctx.beginPath();
+                ctx.arc(selectedPoint.x, selectedPoint.y, 5, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function setNewTarget() {
+            const keys = Object.keys(locations);
+            currentTarget = keys[Math.floor(Math.random() * keys.length)];
+            targetLocationElement.textContent = currentTarget;
+        }
+
+        function checkAnswer() {
+            if (!selectedPoint) {
+                resultElement.textContent = "Please select a location on the map.";
+                return;
+            }
+            const correctState = locations[currentTarget];
+            // For now, just tell the user the correct state
+            resultElement.textContent = `Correct answer: ${correctState}`;
+            setNewTarget();
+        }
+    </script>
+</body>
+</html>
