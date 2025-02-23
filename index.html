@@ -22,7 +22,6 @@
     <br>
     <button onclick="checkAnswer()">Submit</button>
     <p id="result"></p>
-    <p id="summary"></p>
 
     <script>
         const locations = {
@@ -33,21 +32,18 @@
             "Jute": { state: "West Bengal", x: 600, y: 300 }
         };
 
-        let remainingLocations = [];
         let currentTarget = "";
         let selectedPoint = null;
-        let results = [];
-
         const canvas = document.getElementById("mapCanvas");
         const ctx = canvas.getContext("2d");
         const targetLocationElement = document.getElementById("target-location");
         const resultElement = document.getElementById("result");
-        const summaryElement = document.getElementById("summary");
         const mapImage = new Image();
         mapImage.src = "india_map.png";
 
         mapImage.onload = function () {
-            startNewRound();
+            redraw();
+            setNewTarget();
         };
 
         canvas.addEventListener("click", function (event) {
@@ -70,21 +66,10 @@
             }
         }
 
-        function startNewRound() {
-            remainingLocations = shuffleArray(Object.keys(locations));
-            results = [];
-            nextQuestion();
-        }
-
-        function nextQuestion() {
-            if (remainingLocations.length === 0) {
-                showSummary();
-                return;
-            }
-            currentTarget = remainingLocations.pop();
+        function setNewTarget() {
+            const keys = Object.keys(locations);
+            currentTarget = keys[Math.floor(Math.random() * keys.length)];
             targetLocationElement.textContent = currentTarget;
-            selectedPoint = null;
-            redraw();
         }
 
         function checkAnswer() {
@@ -93,19 +78,8 @@
                 return;
             }
             const correctCoords = locations[currentTarget];
-            results.push(`${currentTarget}: ${correctCoords.state}`);
-            resultElement.textContent = `Correct state: ${correctCoords.state}`;
-            setTimeout(nextQuestion, 2000);
-        }
-
-        function showSummary() {
-            resultElement.textContent = "Round Complete!";
-            summaryElement.innerHTML = "<strong>Summary of Answers:</strong><br>" + results.join("<br>");
-            setTimeout(startNewRound, 5000);
-        }
-
-        function shuffleArray(array) {
-            return array.sort(() => Math.random() - 0.5);
+            resultElement.textContent = Correct state: ${correctCoords.state};
+            setTimeout(setNewTarget, 2000);
         }
     </script>
 </body>
