@@ -114,6 +114,14 @@
             "Rajiv Gandhi": "Hyderabad"
         };
 
+        // Add coordinates for each location (example values, adjust as needed)
+        const locationCoordinates = {
+            "Kolkata Sep 1920 session": { x: 700, y: 300 },
+            "Nagpur Dec 1920 session": { x: 500, y: 400 },
+            "Madras 1927 session": { x: 600, y: 500 },
+            // Add coordinates for all other locations...
+        };
+
         let currentTarget = "";
         let selectedPoint = null;
         const canvas = document.getElementById("mapCanvas");
@@ -140,6 +148,17 @@
         function redraw() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             ctx.drawImage(mapImage, 0, 0, canvas.width, canvas.height);
+
+            // Draw the black pointer at the correct location
+            if (currentTarget && locationCoordinates[currentTarget]) {
+                const correctLocation = locationCoordinates[currentTarget];
+                ctx.fillStyle = "black";
+                ctx.beginPath();
+                ctx.arc(correctLocation.x, correctLocation.y, 5, 0, Math.PI * 2);
+                ctx.fill();
+            }
+
+            // Draw the selected point
             if (selectedPoint) {
                 ctx.fillStyle = "red";
                 ctx.beginPath();
