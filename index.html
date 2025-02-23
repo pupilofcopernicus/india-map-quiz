@@ -114,13 +114,8 @@
             "Rajiv Gandhi": "Hyderabad"
         };
 
-        // Add coordinates for each location (example values, adjust as needed)
-        const locationCoordinates = {
-            "Kolkata Sep 1920 session": { x: 700, y: 300 },
-            "Nagpur Dec 1920 session": { x: 500, y: 400 },
-            "Madras 1927 session": { x: 600, y: 500 },
-            // Add coordinates for all other locations...
-        };
+        // Add coordinates for each location (initially empty)
+        const locationCoordinates = {};
 
         let currentTarget = "";
         let selectedPoint = null;
@@ -129,7 +124,7 @@
         const targetLocationElement = document.getElementById("target-location");
         const resultElement = document.getElementById("result");
         const mapImage = new Image();
-        mapImage.src = "india_map.png";
+        mapImage.src = "india_map.png"; // Ensure this path is correct
 
         mapImage.onload = function () {
             redraw();
@@ -138,10 +133,10 @@
 
         canvas.addEventListener("click", function (event) {
             const rect = canvas.getBoundingClientRect();
-            selectedPoint = {
-                x: event.clientX - rect.left,
-                y: event.clientY - rect.top
-            };
+            const x = event.clientX - rect.left;
+            const y = event.clientY - rect.top;
+            console.log(`Clicked at: (${x}, ${y})`); // Debug: Log click coordinates
+            selectedPoint = { x, y };
             redraw();
         });
 
