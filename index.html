@@ -7,29 +7,65 @@
     <style>
         body {
             text-align: center;
-            font-family: Arial, sans-serif;
+            font-family: 'Poppins', sans-serif;
         }
         canvas {
             border: 1px solid black;
             cursor: crosshair;
         }
+        #result {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .footer {
+            margin-top: 20px;
+            font-size: 16px;
+            font-weight: bold;
+        }
     </style>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 </head>
 <body>
     <h1>India Map Quiz</h1>
+    <p id="result">Correct state will be displayed here</p>
     <p>Click on: <strong id="target-location">Loading...</strong></p>
     <canvas id="mapCanvas" width="800" height="600"></canvas>
     <br>
     <button onclick="checkAnswer()">Submit</button>
-    <p id="result"></p>
+    <p class="footer">Made by Diptanshu</p>
 
     <script>
         const locations = {
-            "Sugarcane": { state: "Madhya Pradesh", x: 400, y: 350 },
-            "Tea": { state: "Assam", x: 700, y: 200 },
-            "Coffee": { state: "Karnataka", x: 350, y: 450 },
-            "Rubber": { state: "Kerala", x: 300, y: 500 },
-            "Jute": { state: "West Bengal", x: 600, y: 300 }
+            "Sugarcane": { state: "Madhya Pradesh", x: 410, y: 350 },
+            "Tea": { state: "Assam", x: 710, y: 200 },
+            "Coffee": { state: "Karnataka", x: 360, y: 450 },
+            "Rubber": { state: "Kerala", x: 310, y: 500 },
+            "Jute": { state: "West Bengal", x: 610, y: 300 },
+            "Mayurbhanj": { state: "Odisha", x: 560, y: 350 },
+            "Durg": { state: "Odisha", x: 550, y: 360 },
+            "Baildadila": { state: "Chhattisgarh", x: 510, y: 400 },
+            "Bellary": { state: "Karnataka", x: 360, y: 460 },
+            "Kudremukh": { state: "Karnataka", x: 350, y: 470 },
+            "Raniganj": { state: "West Bengal", x: 630, y: 310 },
+            "Bokaro": { state: "Jharkhand", x: 590, y: 320 },
+            "Talcher": { state: "Odisha", x: 570, y: 340 },
+            "Neyveli": { state: "Tamil Nadu", x: 410, y: 550 },
+            "Digboi": { state: "Assam", x: 720, y: 190 },
+            "Naharkatia": { state: "Assam", x: 730, y: 195 },
+            "Mumbai High": { state: "Offshore of Mumbai", x: 210, y: 400 },
+            "Bassein": { state: "Offshore of Mumbai", x: 220, y: 410 },
+            "Kalol": { state: "Gujarat", x: 260, y: 300 },
+            "Ankaleshwar": { state: "Gujarat", x: 270, y: 320 },
+            "Namrup": { state: "Assam", x: 740, y: 200 },
+            "Singrauli": { state: "Madhya Pradesh", x: 420, y: 340 },
+            "Ramagundam": { state: "Telangana", x: 460, y: 420 },
+            "Raja Sansi": { state: "Punjab", x: 210, y: 200 },
+            "Indira Gandhi": { state: "Delhi", x: 310, y: 250 },
+            "Chhatrapati Shivaji": { state: "Mumbai", x: 210, y: 380 },
+            "Meenambakkam": { state: "Chennai", x: 430, y: 530 },
+            "Netaji Subhash Chandra Bose": { state: "Kolkata", x: 620, y: 290 },
+            "Rajiv Gandhi": { state: "Hyderabad", x: 460, y: 430 }
         };
 
         let currentTarget = "";
@@ -78,7 +114,7 @@
                 return;
             }
             const correctCoords = locations[currentTarget];
-            resultElement.textContent = Correct state: ${correctCoords.state};
+            resultElement.textContent = `Correct state: ${correctCoords.state}`;
             setTimeout(setNewTarget, 2000);
         }
     </script>
