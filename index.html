@@ -25,46 +25,45 @@
 
     <script>
         const locations = {
-            "Sugarcane": "Madhya Pradesh",
-            "Tea": "Assam",
-            "Coffee": "Karnataka",
-            "Rubber": "Kerala",
-            "Jute": "West Bengal",
-            "Mayurbhanj": "Odisha",
-            "Durg": "Odisha",
-            "Baildadila": "Chhattisgarh",
-            "Bellary": "Karnataka",
-            "Kudremukh": "Karnataka",
-            "Raniganj": "West Bengal",
-            "Bokaro": "Jharkhand",
-            "Talcher": "Odisha",
-            "Neyveli": "Tamil Nadu",
-            "Digboi": "Assam",
-            "Naharkatia": "Assam",
-            "Mumbai High": "Offshore of Mumbai",
-            "Bassein": "Offshore of Mumbai",
-            "Kalol": "Gujarat",
-            "Ankaleshwar": "Gujarat",
-            "Namrup": "Assam",
-            "Singrauli": "Madhya Pradesh",
-            "Ramagundam": "Telangana",
-            "Raja Sansi": "Punjab",
-            "Indira Gandhi": "Delhi",
-            "Chhatrapati Shivaji": "Mumbai",
-            "Meenambakkam": "Chennai",
-            "Netaji Subhash Chandra Bose": "Kolkata",
-            "Rajiv Gandhi": "Hyderabad"
+            "Sugarcane": { state: "Madhya Pradesh", x: 400, y: 350 },
+            "Tea": { state: "Assam", x: 700, y: 200 },
+            "Coffee": { state: "Karnataka", x: 350, y: 450 },
+            "Rubber": { state: "Kerala", x: 300, y: 500 },
+            "Jute": { state: "West Bengal", x: 600, y: 300 },
+            "Mayurbhanj": { state: "Odisha", x: 550, y: 350 },
+            "Durg": { state: "Odisha", x: 540, y: 360 },
+            "Baildadila": { state: "Chhattisgarh", x: 500, y: 400 },
+            "Bellary": { state: "Karnataka", x: 350, y: 460 },
+            "Kudremukh": { state: "Karnataka", x: 340, y: 470 },
+            "Raniganj": { state: "West Bengal", x: 620, y: 310 },
+            "Bokaro": { state: "Jharkhand", x: 580, y: 320 },
+            "Talcher": { state: "Odisha", x: 560, y: 340 },
+            "Neyveli": { state: "Tamil Nadu", x: 400, y: 550 },
+            "Digboi": { state: "Assam", x: 710, y: 190 },
+            "Naharkatia": { state: "Assam", x: 720, y: 195 },
+            "Mumbai High": { state: "Offshore of Mumbai", x: 200, y: 400 },
+            "Bassein": { state: "Offshore of Mumbai", x: 210, y: 410 },
+            "Kalol": { state: "Gujarat", x: 250, y: 300 },
+            "Ankaleshwar": { state: "Gujarat", x: 260, y: 320 },
+            "Namrup": { state: "Assam", x: 730, y: 200 },
+            "Singrauli": { state: "Madhya Pradesh", x: 410, y: 340 },
+            "Ramagundam": { state: "Telangana", x: 450, y: 420 },
+            "Raja Sansi": { state: "Punjab", x: 200, y: 200 },
+            "Indira Gandhi": { state: "Delhi", x: 300, y: 250 },
+            "Chhatrapati Shivaji": { state: "Mumbai", x: 200, y: 380 },
+            "Meenambakkam": { state: "Chennai", x: 420, y: 530 },
+            "Netaji Subhash Chandra Bose": { state: "Kolkata", x: 610, y: 290 },
+            "Rajiv Gandhi": { state: "Hyderabad", x: 450, y: 430 }
         };
 
         let currentTarget = "";
         let selectedPoint = null;
-
         const canvas = document.getElementById("mapCanvas");
         const ctx = canvas.getContext("2d");
         const targetLocationElement = document.getElementById("target-location");
         const resultElement = document.getElementById("result");
         const mapImage = new Image();
-        mapImage.src = "india_map.png";  // Make sure to replace with the correct path
+        mapImage.src = "india_map.png";
 
         mapImage.onload = function () {
             ctx.drawImage(mapImage, 0, 0, canvas.width, canvas.height);
@@ -73,9 +72,10 @@
 
         canvas.addEventListener("click", function (event) {
             const rect = canvas.getBoundingClientRect();
-            const x = event.clientX - rect.left;
-            const y = event.clientY - rect.top;
-            selectedPoint = { x, y };
+            selectedPoint = {
+                x: event.clientX - rect.left,
+                y: event.clientY - rect.top
+            };
             redraw();
         });
 
@@ -101,10 +101,21 @@
                 resultElement.textContent = "Please select a location on the map.";
                 return;
             }
-            const correctState = locations[currentTarget];
-            // For now, just tell the user the correct state
-            resultElement.textContent = `Correct answer: ${correctState}`;
-            setNewTarget();
+            const correctCoords = locations[currentTarget];
+            const distance = Math.sqrt(
+                Math.pow(selectedPoint.x - correctCoords.x, 2) +
+                Math.pow(selectedPoint.y - correctCoords.y, 2)
+            );
+            if (distance < 30) {
+                resultElement.textContent = `Correct! Location: ${correctCoords.state}`;
+            } else {
+                resultElement.textContent = `Wrong! Correct state: ${correctCoords.state}`;
+            }
+            ctx.fillStyle = "black";
+            ctx.beginPath();
+            ctx.arc(correctCoords.x, correctCoords.y, 5, 0, Math.PI * 2);
+            ctx.fill();
+            setTimeout(setNewTarget, 2000);
         }
     </script>
 </body>
