@@ -66,7 +66,7 @@
         mapImage.src = "india_map.png";
 
         mapImage.onload = function () {
-            ctx.drawImage(mapImage, 0, 0, canvas.width, canvas.height);
+            redraw();
             setNewTarget();
         };
 
@@ -102,19 +102,11 @@
                 return;
             }
             const correctCoords = locations[currentTarget];
-            const distance = Math.sqrt(
-                Math.pow(selectedPoint.x - correctCoords.x, 2) +
-                Math.pow(selectedPoint.y - correctCoords.y, 2)
-            );
-            if (distance < 30) {
-                resultElement.textContent = `Correct! Location: ${correctCoords.state}`;
-            } else {
-                resultElement.textContent = `Wrong! Correct state: ${correctCoords.state}`;
-            }
             ctx.fillStyle = "black";
             ctx.beginPath();
             ctx.arc(correctCoords.x, correctCoords.y, 5, 0, Math.PI * 2);
             ctx.fill();
+            resultElement.textContent = `Correct state: ${correctCoords.state}`;
             setTimeout(setNewTarget, 2000);
         }
     </script>
