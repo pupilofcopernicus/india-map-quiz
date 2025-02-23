@@ -23,6 +23,127 @@
             font-size: 16px;
             font-weight: bold;
         }
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>India Map Quiz</title>
+    <style>
+        body {
+            text-align: center;
+            font-family: 'Poppins', sans-serif;
+        }
+        canvas {
+            border: 1px solid black;
+            cursor: crosshair;
+        }
+        #result {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .footer {
+            margin-top: 20px;
+            font-size: 16px;
+            font-weight: bold;
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <h1>India Map Quiz</h1>
+    <p id="result">Correct state will be displayed here</p>
+    <p>Click on: <strong id="target-location">Loading...</strong></p>
+    <canvas id="mapCanvas" width="800" height="600"></canvas>
+    <br>
+    <button onclick="checkAnswer()">Submit</button>
+    <p class="footer">Made by Diptanshu</p>
+
+    <script>
+        const locations = {
+            "Kolkata Sep 1920 session": "West Bengal",
+            "Nagpur Dec 1920 session": "Maharashtra",
+            "Madras 1927 session": "Tamil Nadu",
+            // Add all other locations...
+        };
+
+        // Add coordinates for each location (example values, adjust as needed)
+        const locationCoordinates = {
+            "Kolkata Sep 1920 session": { x: 700, y: 300 }, // Example coordinates
+            "Nagpur Dec 1920 session": { x: 500, y: 400 },
+            // Add coordinates for all other locations...
+        };
+
+        let currentTarget = "";
+        let selectedPoint = null;
+        const canvas = document.getElementById("mapCanvas");
+        const ctx = canvas.getContext("2d");
+        const targetLocationElement = document.getElementById("target-location");
+        const resultElement = document.getElementById("result");
+        const mapImage = new Image();
+        mapImage.src = "india_map.png"; // Ensure this path is correct
+
+        mapImage.onload = function () {
+            console.log("Map image loaded successfully."); // Debug: Log image load success
+            redraw();
+            setNewTarget();
+        };
+        mapImage.onerror = function () {
+            console.error("Failed to load map image."); // Debug: Log image load failure
+        };
+
+        canvas.addEventListener("click", function (event) {
+            const rect = canvas.getBoundingClientRect();
+            const x = event.clientX - rect.left;
+            const y = event.clientY - rect.top;
+            console.log(`Clicked at: (${x}, ${y})`); // Debug: Log click coordinates
+            selectedPoint = { x, y };
+            redraw();
+        });
+
+        function redraw() {
+            console.log("Redrawing canvas..."); // Debug: Log redraw calls
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.drawImage(mapImage, 0, 0, canvas.width, canvas.height);
+
+            // Draw the black pointer at the correct location
+            if (currentTarget && locationCoordinates[currentTarget]) {
+                const correctLocation = locationCoordinates[currentTarget];
+                console.log("Drawing black dot at:", correctLocation); // Debug: Log black dot coordinates
+                ctx.fillStyle = "black";
+                ctx.beginPath();
+                ctx.arc(correctLocation.x, correctLocation.y, 5, 0, Math.PI * 2);
+                ctx.fill();
+            }
+
+            // Draw the selected point
+            if (selectedPoint) {
+                ctx.fillStyle = "red";
+                ctx.beginPath();
+                ctx.arc(selectedPoint.x, selectedPoint.y, 5, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function setNewTarget() {
+            const keys = Object.keys(locations);
+            currentTarget = keys[Math.floor(Math.random() * keys.length)];
+            console.log("Current Target:", currentTarget); // Debug: Log the current target
+            targetLocationElement.textContent = currentTarget;
+        }
+
+        function checkAnswer() {
+            if (!selectedPoint) {
+                resultElement.textContent = "Please select a location on the map.";
+                return;
+            }
+            resultElement.textContent = `Correct state: ${locations[currentTarget]}`;
+            setTimeout(setNewTarget, 2000);
+        }
+    </script>
+</body>
+</html>
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 </head>
