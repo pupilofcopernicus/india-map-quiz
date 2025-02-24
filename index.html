@@ -115,6 +115,7 @@
         };
 
         let currentTarget = "";
+        let selectedPoint = null; // Store the clicked point
         const canvas = document.getElementById("mapCanvas");
         const ctx = canvas.getContext("2d");
         const targetLocationElement = document.getElementById("target-location");
@@ -123,24 +124,47 @@
         mapImage.src = "india_map.png"; // Ensure this path is correct
 
         mapImage.onload = function () {
-            ctx.drawImage(mapImage, 0, 0, canvas.width, canvas.height); // Draw the map
+            redraw(); // Draw the map and any existing points
             setNewTarget(); // Set the first target
         };
 
-        canvas.addEventListener("click", function () {
-            resultElement.textContent = `Correct state: ${locations[currentTarget]}`; // Show the correct state
-            setTimeout(setNewTarget, 2000); // Set a new target after 2 seconds
+        canvas.addEventListener("click", function (event) {
+            const rect = canvas.getBoundingClientRect();
+            const x = event.clientX - rect.left; // Get X coordinate of the click
+            const y = event.clientY - rect.top; // Get Y coordinate of the click
+            selectedPoint = { x, y }; // Store the clicked point
+            redraw(); // Redraw the canvas with the new point
         });
+
+        function redraw() {
+            // Clear the canvas and redraw the map
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.drawImage(mapImage, 0, 0, canvas.width, canvas.height);
+
+            // Draw the red dot if a point is selected
+            if (selectedPoint) {
+                ctx.fillStyle = "red";
+                ctx.beginPath();
+                ctx.arc(selectedPoint.x, selectedPoint.y, 5, 0, Math.PI * 2); // Draw a red dot
+                ctx.fill();
+            }
+        }
 
         function setNewTarget() {
             const keys = Object.keys(locations);
-            currentTarget = keys[Math.floor(Math.random() * keys.length)];
-            targetLocationElement.textContent = currentTarget;
+            currentTarget = keys[Math.floor(Math.random() * keys.length)]; // Pick a random target
+            targetLocationElement.textContent = currentTarget; // Update the target display
+            selectedPoint = null; // Reset the selected point
+            redraw(); // Redraw the canvas without the red dot
         }
 
         function checkAnswer() {
-            resultElement.textContent = `Correct state: ${locations[currentTarget]}`;
-            setTimeout(setNewTarget, 2000);
+            if (!selectedPoint) {
+                resultElement.textContent = "Please select a location on the map."; // No point selected
+                return;
+            }
+            resultElement.textContent = `Correct state: ${locations[currentTarget]}`; // Show the correct state
+            setTimeout(setNewTarget, 2000); // Set a new target after 2 seconds
         }
     </script>
 </body>
