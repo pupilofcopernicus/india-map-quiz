@@ -124,7 +124,7 @@
         mapImage.src = "india_map.png"; // Ensure this path is correct
 
         mapImage.onload = function () {
-            redraw(); // Draw the map and any existing points
+            redraw(); // Draw the map
             setNewTarget(); // Set the first target
         };
 
@@ -164,7 +164,10 @@
                 return;
             }
             resultElement.textContent = `Correct state: ${locations[currentTarget]}`; // Show the correct state
-            setTimeout(setNewTarget, 2000); // Set a new target after 2 seconds
+            setTimeout(() => {
+                setNewTarget(); // Reset the target after 2 seconds
+                resultElement.textContent = ""; // Clear the result message
+            }, 2000); // 2-second timeout
         }
     </script>
 </body>
