@@ -123,13 +123,13 @@
         mapImage.src = "india_map.png"; // Ensure this path is correct
 
         mapImage.onload = function () {
-            ctx.drawImage(mapImage, 0, 0, canvas.width, canvas.height);
-            setNewTarget();
+            ctx.drawImage(mapImage, 0, 0, canvas.width, canvas.height); // Draw the map
+            setNewTarget(); // Set the first target
         };
 
         canvas.addEventListener("click", function () {
-            resultElement.textContent = `Correct state: ${locations[currentTarget]}`;
-            setTimeout(setNewTarget, 2000);
+            resultElement.textContent = `Correct state: ${locations[currentTarget]}`; // Show the correct state
+            setTimeout(setNewTarget, 2000); // Set a new target after 2 seconds
         });
 
         function setNewTarget() {
