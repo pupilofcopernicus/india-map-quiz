@@ -128,6 +128,10 @@
             setNewTarget(); // Set the first target
         };
 
+        mapImage.onerror = function () {
+            alert("Error: The map image could not be loaded. Please check the file path.");
+        };
+
         canvas.addEventListener("click", function (event) {
             const rect = canvas.getBoundingClientRect();
             const x = event.clientX - rect.left; // Get X coordinate of the click
@@ -153,7 +157,7 @@
         function setNewTarget() {
             const keys = Object.keys(locations);
             currentTarget = keys[Math.floor(Math.random() * keys.length)]; // Pick a random target
-            targetLocationElement.textContent = currentTarget; // Update the target display
+            targetLocationElement.textContent = currentTarget; // Update the target display with the full name
             selectedPoint = null; // Reset the selected point
             redraw(); // Redraw the canvas without the red dot
         }
