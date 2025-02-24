@@ -114,87 +114,7 @@
             "Rajiv Gandhi": "Hyderabad"
         };
 
-        // Add coordinates for each location (example values, adjust as needed)
-        const locationCoordinates = {
-            "Kolkata Sep 1920 session": { x: 700, y: 300 },
-            "Nagpur Dec 1920 session": { x: 500, y: 400 },
-            "Madras 1927 session": { x: 600, y: 500 },
-            "Champaran": { x: 550, y: 250 },
-            "Kheda": { x: 450, y: 350 },
-            "Ahmedabad": { x: 400, y: 300 },
-            "Jallianwalabagh": { x: 300, y: 200 },
-            "Dandi": { x: 350, y: 400 },
-            "Chauri Chaura": { x: 500, y: 300 },
-            "Salal": { x: 200, y: 100 },
-            "Bhakranangal": { x: 250, y: 150 },
-            "Tehri": { x: 300, y: 250 },
-            "Rana Pratap Singh": { x: 400, y: 200 },
-            "Sardar Sarovar": { x: 450, y: 350 },
-            "Hirakud": { x: 600, y: 400 },
-            "Nagarjuna": { x: 550, y: 450 },
-            "Tungabhadra": { x: 500, y: 500 },
-            "Narora": { x: 450, y: 300 },
-            "Kakrapara": { x: 400, y: 350 },
-            "Tarapur": { x: 350, y: 400 },
-            "Kalpakkam": { x: 600, y: 500 },
-            "Indore": { x: 450, y: 300 },
-            "Surat": { x: 400, y: 350 },
-            "Kanpur": { x: 500, y: 300 },
-            "Coimbatore": { x: 550, y: 500 },
-            "Durgapur": { x: 600, y: 300 },
-            "Bokaro": { x: 550, y: 350 },
-            "Jamshedpur": { x: 500, y: 400 },
-            "Bhilai": { x: 450, y: 450 },
-            "Vijaynagar": { x: 400, y: 500 },
-            "Salem": { x: 350, y: 550 },
-            "Noida": { x: 300, y: 250 },
-            "Gandhinagar": { x: 350, y: 300 },
-            "Pune": { x: 400, y: 350 },
-            "Hyderabad": { x: 450, y: 400 },
-            "Bengaluru": { x: 500, y: 450 },
-            "Chennai": { x: 550, y: 500 },
-            "Thiruvananthapuram": { x: 600, y: 550 },
-            "Kandla": { x: 350, y: 300 },
-            "Marmagao": { x: 400, y: 350 },
-            "New Mangalore": { x: 450, y: 400 },
-            "Kochi": { x: 500, y: 450 },
-            "Tuticorin": { x: 550, y: 500 },
-            "Visakhapatnam": { x: 600, y: 400 },
-            "Paradip": { x: 550, y: 350 },
-            "Haldia": { x: 500, y: 300 },
-            "Sugarcane": { x: 450, y: 250 },
-            "Tea": { x: 400, y: 200 },
-            "Cotton": { x: 350, y: 150 },
-            "Coffee": { x: 300, y: 100 },
-            "Rubber": { x: 250, y: 50 },
-            "Jute": { x: 200, y: 100 },
-            "Mayurbhanj": { x: 150, y: 150 },
-            "Durg": { x: 100, y: 200 },
-            "Baildadila": { x: 50, y: 250 },
-            "Bellary": { x: 100, y: 300 },
-            "Kudremukh": { x: 150, y: 350 },
-            "Raniganj": { x: 200, y: 400 },
-            "Talcher": { x: 250, y: 450 },
-            "Neyveli": { x: 300, y: 500 },
-            "Digboi": { x: 350, y: 550 },
-            "Naharkatia": { x: 400, y: 600 },
-            "Mumbai High": { x: 450, y: 650 },
-            "Bassein": { x: 500, y: 700 },
-            "Kalol": { x: 550, y: 750 },
-            "Ankaleshwar": { x: 600, y: 800 },
-            "Namrup": { x: 650, y: 850 },
-            "Singrauli": { x: 700, y: 900 },
-            "Ramagundam": { x: 750, y: 950 },
-            "Raja Sansi": { x: 800, y: 1000 },
-            "Indira Gandhi": { x: 850, y: 1050 },
-            "Chhatrapati Shivaji": { x: 900, y: 1100 },
-            "Meenambakkam": { x: 950, y: 1150 },
-            "Netaji Subhash Chandra Bose": { x: 1000, y: 1200 },
-            "Rajiv Gandhi": { x: 1050, y: 1250 }
-        };
-
         let currentTarget = "";
-        let selectedPoint = null;
         const canvas = document.getElementById("mapCanvas");
         const ctx = canvas.getContext("2d");
         const targetLocationElement = document.getElementById("target-location");
@@ -203,40 +123,14 @@
         mapImage.src = "india_map.png"; // Ensure this path is correct
 
         mapImage.onload = function () {
-            redraw();
+            ctx.drawImage(mapImage, 0, 0, canvas.width, canvas.height);
             setNewTarget();
         };
 
-        canvas.addEventListener("click", function (event) {
-            const rect = canvas.getBoundingClientRect();
-            const x = event.clientX - rect.left;
-            const y = event.clientY - rect.top;
-            console.log(`Clicked at: (${x}, ${y})`); // Debug: Log click coordinates
-            selectedPoint = { x, y };
-            redraw();
+        canvas.addEventListener("click", function () {
+            resultElement.textContent = `Correct state: ${locations[currentTarget]}`;
+            setTimeout(setNewTarget, 2000);
         });
-
-        function redraw() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.drawImage(mapImage, 0, 0, canvas.width, canvas.height);
-
-            // Draw the black pointer at the correct location
-            if (currentTarget && locationCoordinates[currentTarget]) {
-                const correctLocation = locationCoordinates[currentTarget];
-                ctx.fillStyle = "black";
-                ctx.beginPath();
-                ctx.arc(correctLocation.x, correctLocation.y, 5, 0, Math.PI * 2);
-                ctx.fill();
-            }
-
-            // Draw the selected point
-            if (selectedPoint) {
-                ctx.fillStyle = "red";
-                ctx.beginPath();
-                ctx.arc(selectedPoint.x, selectedPoint.y, 5, 0, Math.PI * 2);
-                ctx.fill();
-            }
-        }
 
         function setNewTarget() {
             const keys = Object.keys(locations);
@@ -245,10 +139,6 @@
         }
 
         function checkAnswer() {
-            if (!selectedPoint) {
-                resultElement.textContent = "Please select a location on the map.";
-                return;
-            }
             resultElement.textContent = `Correct state: ${locations[currentTarget]}`;
             setTimeout(setNewTarget, 2000);
         }
